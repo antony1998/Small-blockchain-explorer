@@ -1,0 +1,21 @@
+.lucio-loading {
+  position: relative;
+}
+.lucio-loading .lucio-loading-content {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+.lucio-loading .lucio-loading-content.lucio-loading-blur {
+  opacity: 0.4;
+  filter: blur(0.5px);
+}
+.lucio-loading .lucio-loading-element {
+  position: absolute;
+  height: 100%;
+  max-height: 320px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -13,7 +13,7 @@ import CreateTask from './task/CreateTask'
 import EditTask from './task/EditTask'
 import Regular from './core/Regular'
 import Contract from './core/Contract'
-
+import Token from './core/Token'
 class MainRouter extends Component {
   // Removes the server-side injected CSS when React component mounts
   componentDidMount() {
@@ -35,6 +35,7 @@ class MainRouter extends Component {
         <Route path="/user/:userId" component={Profile}/>
         <Route path="/Regular" component={Regular}/>
         <Route path="/Contract" component={Contract}/>
+        <Route path="/Token" component={Token}/>
       </Switch>
     </div>)
   }

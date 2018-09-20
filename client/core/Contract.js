@@ -63,7 +63,7 @@ class Contract extends Component {
     // const read = (params, credentials) => {
     //   console.log(params)
     // let url = "https://api.etherscan.io/api?module=account&action=balance&address=" + "0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a" +"&tag=latest&apikey=YourApiKeyToken 0x91c2c922a5db860e8b1a6775b7fe00dff106a8e0";
-    let url1 = "https://api.etherscan.io/api?module=account&action=balance&address=" +this.state.address + "&tag=latest&apikey=YourApiKeyToken";
+    let url1 = "https://api.etherscan.io/api?module=contract&action=getabi&address=0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413&apikey=YourApiKeyToken";
     console.log(url1);
     fetch(url1, {
       method: 'GET',
@@ -74,23 +74,23 @@ class Contract extends Component {
       console.log(this.state.balance);
     }).catch((err) => console.log(err))
 
-    let url = "http://api.etherscan.io/api?module=account&action=txlist&address=" + this.state.address + "&startblock=0&endblock=99999999&sort=asc&apikey=YourApiKeyToken"
-    fetch(url, {
-        method: 'GET',
-        // headers: {
-        //   'Accept': 'application/json',
-        //   'Content-Type': 'application/json',
-        //   'Authorization': 'Bearer ' + credentials.t
-        // }
-      }).then((response) => {
-        return response.json();}
-      ).then(data =>{
-        this.setState({data:data});
-        console.log(this.state.data.result);
-        console.log(this.state.data.result.length);
-        this.state.redirect = true;
-        this.drawTable();
-      }).catch((err) => console.log(err))
+    // let url = "http://api.etherscan.io/api?module=account&action=txlist&address=" + this.state.address + "&startblock=0&endblock=99999999&sort=asc&apikey=YourApiKeyToken"
+    // fetch(url, {
+    //     method: 'GET',
+    //     // headers: {
+    //     //   'Accept': 'application/json',
+    //     //   'Content-Type': 'application/json',
+    //     //   'Authorization': 'Bearer ' + credentials.t
+    //     // }
+    //   }).then((response) => {
+    //     return response.json();}
+    //   ).then(data =>{
+    //     this.setState({data:data});
+    //     console.log(this.state.data.result);
+    //     console.log(this.state.data.result.length);
+    //     this.state.redirect = true;
+    //     this.drawTable();
+    //   }).catch((err) => console.log(err))
 }
 saveData(){
     console.log("save");
@@ -153,11 +153,11 @@ drawTable() {
         <form action="/action_page.php" style={leftPadding}>
           <TextField style={boxWidth} id="address" type="address" label="address" className={classes.textField} value={this.state.address} onChange={this.handleChange('address')} margin="normal"/>
           <button type="button" className="btn btn-info"  onClick={()=> this.getData()} >Search</button>
-          {/* <div style={leftPadding}> */}
-            <button style={leftPadding} type="button" className="btn btn-success"  onClick={()=> this.saveData()} >Save</button>
-          {/* </div> */}
-          <div>Balance: {this.state.balance}</div>
+          <button style={leftPadding} type="button" className="btn btn-success"  onClick={()=> this.saveData()} >Save</button>
         </form>
+        <div style = {{paddingTop: "20px",paddingLeft: "20px", paddingRight: "20px"}}>
+          <textarea style={{width:"100%", height:"400px"}} value =  {this.state.balance}/>
+        </div>
       </div>)
     }
     const blocks = this.state.data.result.map((item, i) => {
@@ -177,55 +177,12 @@ drawTable() {
         <form action="/action_page.php" style={leftPadding}>
           <TextField style={boxWidth} id="address" type="address" label="address" className={classes.textField} value={this.state.address} onChange={this.handleChange('address')} margin="normal"/>
           <button type="button" className="btn btn-info"  onClick={()=> this.getData()} >Search</button>
-          {/* <div style={leftPadding}> */}
-            <button style={leftPadding} type="button" className="btn btn-success"  onClick={()=> this.saveData()} >Save</button>
-          {/* </div> */}
-          <div>Balance: {this.state.balance}</div>
+          <button style={leftPadding} type="button" className="btn btn-success"  onClick={()=> this.saveData()} >Save</button>
         </form>
-        <table id="table_id" className="display">
-          <thead>
-            <tr>
-              <th>TxHash</th>
-              <th>Block</th>
-              <th>From</th>
-              <th>To</th>
-              <th>Value</th>
-            </tr>
-          </thead>
-          <tbody>
-             {blocks}
-          </tbody>
-        </table>
+        <div style = {{paddingTop: "20px",paddingLeft: "20px", paddingRight: "20px"}}>
+          <textarea style={{width:"100%", height:"400px"}} value =  {this.state.balance}/>
+        </div>
       </div>
-      // <div className={classes.root}>
-      //   {this.state.defaultPage &&
-      //     <Grid container spacing={24}>
-      //       <Grid item xs={12}>
-      //         <Card className={classes.card}>
-      //           <Typography type="headline" component="h2" className={classes.title}>
-      //             Home Page
-      //           </Typography>
-      //           <CardMedia className={classes.media} image={seashellImg} title="Unicorn Shells"/>
-      //           <CardContent>
-      //             <Typography type="body1" component="p">
-      //               Welcome to the MERN Social home page. 
-      //             </Typography>
-      //           </CardContent>
-      //         </Card>
-      //       </Grid>
-      //     </Grid>
-      //   }
-      //   {!this.state.defaultPage &&
-      //     <Grid container spacing={24}>
-      //       <Grid item xs={8} sm={7}>
-      //         <Newsfeed/>
-      //       </Grid>
-      //       <Grid item xs={6} sm={5}>
-      //         <FindPeople/>
-      //       </Grid>
-      //     </Grid>
-      //   }
-      // </div>
     )
   }
 }

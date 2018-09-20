@@ -41,6 +41,7 @@ class Regular extends Component {
     balance: '',
     module: '',
     data : [],
+    internalData : [],
     redirect : false
   }
   init = () => {
@@ -92,9 +93,31 @@ class Regular extends Component {
         console.log(this.state.data.result);
         console.log(this.state.data.result.length);
         this.state.redirect = true;
-        this.drawTable();
+        this.getInternalData();
+        // this.drawTable();
       }).catch((err) => console.log(err))
-}
+      console.log("here");
+  }
+  getInternalData(){
+
+    let url2 = "http://api.etherscan.io/api?module=account&action=txlistinternal&address=" + this.state.address + "&startblock=0&endblock=99999999&sort=asc&apikey=YourApiKeyToken"
+    fetch(url2, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        //   'Authorization': 'Bearer ' + credentials.t
+        }
+      }).then((response) => {
+        return response.json();}
+      ).then(data =>{
+        this.setState({internalData:data});
+        console.log(this.state.internalData.result);
+        console.log(this.state.internalData.result.length);
+        this.state.redirect = true;
+        this.drawTable();
+      }).catch((err) => console.log(err)) 
+  }
 saveData(){
     console.log("save");
     // const create = (task) => {
@@ -135,12 +158,47 @@ saveData(){
           response.json();
         }).catch((err) => console.log(err))
     }
+
+    for(i=0; i<this.state.internalData.result.length; i++)
+    {
+      console.log(i);
+      let myData = {address: this.state.address, ballance: this.state.balance, blockNumber: this.state.internalData.result[i].blockNumber,
+        contractAddress: this.state.internalData.result[i].contractAddress,
+        errCode: this.state.internalData.result[i].errCode,
+        from: this.state.internalData.result[i].from,
+        gas: this.state.internalData.result[i].gas,
+        gasUsed: this.state.internalData.result[i].gasUsed,
+        hash:this.state.internalData.result[i].hash,
+        input: this.state.internalData.result[i].input,
+        isError: this.state.internalData.result[i].isError,
+        timeStamp:this.state.internalData.result[i].timeStamp,
+        to:this.state.internalData.result[i].to,
+        traceId: this.state.internalData.result[i].traceId,
+        type: this.state.internalData.result[i].type,
+        value: this.state.internalData.result[i].value,
+      };
+      console.log(myData);
+      fetch('/api/internal/', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(myData)
+        })
+        .then((response) => {
+          console.log(response);
+          response.json();
+        }).catch((err) => console.log(err))
+    }
   }
 
 drawTable() {
   console.log('draw table');
   
   $('#table_id').DataTable();
+  console.log('next table');
+  $('#table_internal').DataTable();
 }
 
   truncate(str, n) {
@@ -175,7 +233,7 @@ drawTable() {
         </form>
       </div>)
     }
-    const blocks = this.state.data.result.map((item, i) => {
+    const block1 = this.state.data.result.map((item, i) => {
       item.hash = this.truncate(item.hash, 10);
       return (
           <tr key={i}>
@@ -187,7 +245,24 @@ drawTable() {
           </tr>
         )
       })
-
+    let block2;
+    if(this.state.internalData.result == undefined)
+      block2 = (<div></div>)
+    else{
+      block2 = this.state.internalData.result.map((item, i) => {
+      item.hash = this.truncate(item.hash, 10);
+      return (
+          <tr key={i}>
+              <td>{item.hash}</td>
+              <td>{item.blockNumber}</td>
+              <td>{item.from}</td>
+              <td>{item.to}</td>
+              <td>{item.value}</td>
+          </tr>
+        )
+      }) 
+    }
+    
     return (
       <div>
         <form action="/action_page.php" style={leftPadding}>
@@ -198,24 +273,73 @@ drawTable() {
           {/* </div> */}
           <div>Balance: {this.state.balance}</div>
         </form>
+        <div style={{paddingLeft: '20px', paddingRight: '20px'}}>Normal Transaction</div>
         <div style={{paddingLeft: '20px', paddingRight: '20px'}}>
           <div className="boxShadow">
-           <table id="table_id" className="display">
-            <thead>
-              <tr>
-                <th>TxHash</th>
-                <th>Block</th>
-                <th>From</th>
-                <th>To</th>
-                <th>Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              {blocks}
-            </tbody>
-          </table>
+            <table id="table_id" className="display">
+              <thead>
+                <tr>
+                  <th>TxHash</th>
+                  <th>Block</th>
+                  <th>From</th>
+                  <th>To</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                {block1}
+              </tbody>
+            </table>
+          </div>
         </div>
+        <div>
+          {
+            this.state.internalData.result === undefined
+              ? (<div></div>)
+              : (
+                <div>
+                  <div style={{paddingLeft: '20px', paddingRight: '20px'}}>Internal Transaction</div>
+                  <div style={{paddingLeft: '20px', paddingRight: '20px'}}>
+                    <div className="boxShadow">
+                      <table id="table_internal" className="display">
+                        <thead>
+                          <tr>
+                            <th>TxHash</th>
+                            <th>Block</th>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Value</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {block2}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              )
+          }
         </div>
+        {/* <div style={{paddingLeft: '20px', paddingRight: '20px'}}>Internal Transaction</div>
+        <div style={{paddingLeft: '20px', paddingRight: '20px'}}>
+          <div className="boxShadow">
+            <table id="table_internal" className="display">
+              <thead>
+                <tr>
+                  <th>TxHash</th>
+                  <th>Block</th>
+                  <th>From</th>
+                  <th>To</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                {block2}
+              </tbody>
+            </table>
+          </div>
+        </div> */}
       </div>
       // <div className={classes.root}>
       //   {this.state.defaultPage &&

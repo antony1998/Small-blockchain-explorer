@@ -11,6 +11,7 @@ import authRoutes from './routes/auth.routes'
 import postRoutes from './routes/post.routes'
 import taskRoutes from './routes/task.routes'
 import transactionRoutes from './routes/transaction.routes'
+import internalTransRoutes from './routes/internaltrans.routes'
 // modules for server side rendering
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
@@ -51,6 +52,7 @@ app.use('/', authRoutes)
 app.use('/', postRoutes)
 app.use('/', taskRoutes)
 app.use('/', transactionRoutes)
+app.use('/', internalTransRoutes)
 
 app.get('*', (req, res) => {
    const sheetsRegistry = new SheetsRegistry()

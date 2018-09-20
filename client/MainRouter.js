@@ -11,6 +11,8 @@ import Menu from './core/Menu'
 import TaskManagement from './task/TaskManagement'
 import CreateTask from './task/CreateTask'
 import EditTask from './task/EditTask'
+import Regular from './core/Regular'
+import Contract from './core/Contract'
 
 class MainRouter extends Component {
   // Removes the server-side injected CSS when React component mounts
@@ -31,6 +33,8 @@ class MainRouter extends Component {
         <Route path="/signin" component={Signin}/>
         <PrivateRoute path="/user/edit/:userId" component={EditProfile}/>
         <Route path="/user/:userId" component={Profile}/>
+        <Route path="/Regular" component={Regular}/>
+        <Route path="/Contract" component={Contract}/>
       </Switch>
     </div>)
   }

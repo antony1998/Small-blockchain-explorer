@@ -17,7 +17,7 @@ const isActive = (history, path) => {
 const Menu = withRouter(({history}) => (
   <AppBar position="static">
     <Toolbar>
-      <Typography type="title" color="inherit">
+      {/* <Typography type="title" color="inherit">
         MERN Social
       </Typography>
       <Link to="/">
@@ -46,7 +46,7 @@ const Menu = withRouter(({history}) => (
               auth.signout(() => history.push('/'))
             }}>Sign out</Button>
         </span>)
-      }
+      } */}
       {/* {
         // auth.isAuthenticated() && 
         (<span>
@@ -55,6 +55,32 @@ const Menu = withRouter(({history}) => (
           </Link>
         </span>)
       } */}
+      {
+        // auth.isAuthenticated() && 
+        (<span>
+          <Link to={"/Regular/"}>
+            <Button>Regular</Button>
+          </Link>
+        </span>)
+      }
+      
+      {
+        // auth.isAuthenticated() && 
+        (<span>
+          <Link to={"/Contract/"}>
+            <Button>Contract</Button>
+          </Link>
+        </span>)
+      }
+
+      {
+        // auth.isAuthenticated() && 
+        (<span>
+          <Link to={"/Token/"}>
+            <Button>Token</Button>
+          </Link>
+        </span>)
+      }
     </Toolbar>
   </AppBar>
 ))
